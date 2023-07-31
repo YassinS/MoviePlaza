@@ -1,0 +1,21 @@
+pimcore:
+    assets:
+        image:
+            thumbnails:
+                definitions:
+                    thumb1:
+                        items: {  }
+                        medias: {  }
+                        name: thumb1
+                        description: ''
+                        group: ''
+                        format: ORIGINAL
+                        quality: 85
+                        highResolution: null
+                        preserveColor: false
+                        preserveMetaData: false
+                        rasterizeSVG: false
+                        downloadable: false
+                        modificationDate: 1690535739
+                        creationDate: 1690535633
+                        preserveAnimation: false

@@ -1,0 +1,6 @@
+{% if editmode %}
+   {{pimcore_image("image1",{"thumbnail":"thumb1"})}}
+{% else %}
+    {% set thumbnail1 = pimcore_image("image1").getThumbnail("thumb1")  %}
+    <img src="{{thumbnail1}}" >
+{% endif %}

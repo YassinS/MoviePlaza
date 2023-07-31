@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+{% block title %} Welcome {% endblock title%} 
+{% block body %}
+{% if editmode %}
+<div>
+    <h1>Pimcore Playground</h1>
+    <p>Here you can test your various Bricks</p>
+</div>
+{% endif %}
+
+{{ pimcore_areablock("playground") }}
+
+<h1> <a href="{{pimcore_document(7)}}">Fetch from our API</a></h1>
+{% endblock body %}

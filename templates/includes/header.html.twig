@@ -1,0 +1,15 @@
+
+{% block navigation %}
+
+<nav class="navbar bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="{{asset('images/camera.png')}}"  width="30" height="24" class="d-inline-block align-text-top">
+        MovieHub
+    </a>
+    {% block search_form %}
+    {% include "search/view.html.twig" %}
+    {% endblock %}
+  </div>
+</nav>
+{% endblock %}
