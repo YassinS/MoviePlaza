@@ -62,7 +62,7 @@ services:
             - '8080:8080'
     php:
         user: '501:20' # set to your uid:gid
-        image: pimcore-php-kafka
+        image: pimcore/pimcore:php8.2-supervisord-latest
         environment:
             COMPOSER_HOME: /var/www/html
             PHP_IDE_CONFIG: serverName=localhost
