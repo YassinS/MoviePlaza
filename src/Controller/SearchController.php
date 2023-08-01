@@ -23,17 +23,12 @@ class SearchController extends FrontendController
      */
     public function defaultAction(Request $request, ApplicationLogger $logger): Response
     {
-        $form = $this->createForm(SearchType::class);
-        $form->handleRequest();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+            $query = trim($request->get("query"));
+            $form = $this->createForm(SearchType::class);
+            $form->handleRequest($request);
             $moviesListing = new Movie\Listing();
-            $logger->info("Search executed");
-            return $this->render("search/results.html.twig",["results"=>$moviesListing, "data"=>$data]);
-        }
-
-
-        return $this->render('search/search.html.twig', ["form"=> $form->createView()]);
+            $moviesListing->setCondition("movieTitle LIKE ?",["%$query%"]);
+            $moviesListing->setLimit(21);
+            return $this->render("search/results.html.twig",["query"=>$query, "movies"=>$moviesListing]);
     }
 }

@@ -1,6 +1,30 @@
-{% block search_form %}
-<pre>
-    {{ dump(results) }}
-</pre>
+{% extends "base.html.twig" %}
 
+{% block body %}
+    <div class="container d-flex justify-content-center">
+        {% if movies|length != 0 %}
+            <div class="container">
+                <h1>Results for: {{query}}</h1>
+                <div class="card-group">
+                    <div class="row">
+                    {% for movie in movies %}
+                        <div class="col">
+                            <div class="card m-3" style="width: 18rem;">
+                                <img src="{{movie.backdrop}}" class="card-img-top" alt="{{movie.movieTitle}}">
+                                <div class="card-body">
+                                    <h4> {{movie.movieTitle}} </h1>
+                                    <p class="card-text text-truncate">{{movie.description}}</p>
+                
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+        <h1>No Movies found with title {{query}}</h1>
+
+        {% endif %}
+    </div>
 {% endblock %}

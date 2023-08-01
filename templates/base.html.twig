@@ -14,14 +14,19 @@
     </head>
     <body>
         <div class="content">
-        {% include "includes/header.html.twig" %}
-            {% block navigation%} 
-                
-            {% endblock navigation%}
-            {% block body %} 
-                {% block search_results %}
-                {% endblock search_results %} 
-            {% endblock body %}
+            {% include "includes/header.html.twig" %}
+            <div id="navbar">
+                {% block navigation %}
+                {% endblock navigation %}
+
+                {% block search_form %}
+                {% endblock search_form %}
+            </div>
+
+            <div id="content">
+                {% block body %}
+                {% endblock body %}
+            </div>
 
         </div>
         <script src="{{ asset('assets/js/bundle.js') }}"></script>

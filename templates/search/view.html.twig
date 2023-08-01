@@ -1,6 +1,13 @@
+
+
 {% block search_form %}
-      <form action="{{path('search_movie')}}" class="d-flex" role="search">
-      <input class="form-control me-2" name="searchTerm" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
+
+    <form action="{{ path('search_movie') }}" class="d-flex" role="search">
+        {% if query is defined %}
+            <input class="form-control me-2" name="query" type="search" placeholder="Search" value= "{{query}}" autocomplete="off" aria-label="Search">
+        {% else %}
+            <input class="form-control me-2" name="query" type="search" placeholder="Search" autocomplete="off" aria-label="Search">
+        {% endif %}
+        <button class="btn btn-outline-success" type="submit">Search</button>
     </form>
-{% endblock %}
+{% endblock search_form %}

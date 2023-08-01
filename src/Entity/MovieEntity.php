@@ -1,6 +1,5 @@
 <?php
 
-namespace App\Entity;
 
 use Exception;
 use Pimcore\Model\DataObject\Data\ExternalImage;

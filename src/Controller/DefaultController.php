@@ -16,9 +16,9 @@ class DefaultController extends FrontendController
      */
     public function defaultAction(Request $request, ApplicationLogger $logger): Response
     {
-        $logger->info("Hello World");
-
-        return $this->render('default/default.html.twig');
+        $clientIp = $request->getClientIp();
+        $logger->info("Client with ip $clientIp connected ");
+        return $this->forward("App\Controller\MovieController::defaultAction");
     }
     public function LogSomeData(ApplicationLogger $logger): void
     {

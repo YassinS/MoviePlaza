@@ -37,10 +37,16 @@ class CreateMovieDaosCommand extends Command{
         $movieDataObject->setId($movie["id"]);
         $movieDataObject->setParentId(1);
         $movieDataObject->setPopularity($movie["popularity"]);
-        $movieDataObject->setKey($movie["title"]);
+        $movieTitle = $movie["title"];
+        if (Movie::getByPath("/$movieTitle") == null) {
+             $movieDataObject->setKey($movie["title"]);
+        } else{
+            $movieDataObject->setKey($movie["title"]. "2");
+        }
+
         $movieDataObject->setPublished(true);
         $movieDataObject->save();
-        $this->logger->debug("Movie added");
+        $this->logger->debug("Movie added". " " .$movie["title"]);
 
     }
 
@@ -60,9 +66,8 @@ class CreateMovieDaosCommand extends Command{
             $topRatedRes = json_decode($topRatedRes);
 
             foreach ($topRatedRes->results as $movie) {
-                $output->writeln($i." ".count($topRatedRes->results));
+                $output->writeln($i);
                 $resArray = ["id"=>$movie->id,"title"=>$movie->original_title,"backdrop"=>$movie->poster_path,"overview"=>$movie->overview, "popularity"=>$movie->popularity];
-
                 if ($movie->original_language == "en") {
                     $this->createMovieAction($resArray);
                     $output->writeln($movie->original_title);
