@@ -83,14 +83,6 @@ class JsonController extends FrontendController
         return $this->json($movie);
     }
 
-    /**
-     * @param Request $request
-     * @return Response
-     * @Route("/api/success_add", name="movie_add_success", methods={"GET"})
-     */
-    public function movieAddSuccess() :Response {
-        return $this->render("success/view.html.twig");
 
-    }
 
 }

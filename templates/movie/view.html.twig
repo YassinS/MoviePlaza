@@ -5,9 +5,11 @@
 {% block body %}
 <div class="container">
 <div class="card-group">
+    <h1 class="text-center">Popular Movies</h1>
     <div class="row">
 {% for movie in movies %}
         <div class="col">
+        <a href="/movie/{{movie.id}}">
         <div class="card m-3" style="width: 18rem;">
             <img src="{{movie.backdrop}}" class="card-img-top" alt="{{movie.movieTitle}}">
             <div class="card-body">
@@ -15,8 +17,9 @@
                 <p class="card-text text-truncate">{{movie.description}}</p>
                 
             </div>
-    </div>
-    </div>
+        </div>
+        </a>
+        </div>
 {% endfor %}
     </div>
     </div>

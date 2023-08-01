@@ -38,10 +38,11 @@ class CreateMovieDaosCommand extends Command{
         $movieDataObject->setParentId(1);
         $movieDataObject->setPopularity($movie["popularity"]);
         $movieTitle = $movie["title"];
+        $movieTitle = str_replace(array("/","\""),'',$movieTitle);
         if (Movie::getByPath("/$movieTitle") == null) {
-             $movieDataObject->setKey($movie["title"]);
+             $movieDataObject->setKey($movieTitle);
         } else{
-            $movieDataObject->setKey($movie["title"]. "2");
+            $movieDataObject->setKey($movieTitle. "2");
         }
 
         $movieDataObject->setPublished(true);
@@ -51,7 +52,8 @@ class CreateMovieDaosCommand extends Command{
     }
 
     protected function configure(): void{
-        $this->addArgument("numofpages", InputArgument::REQUIRED,"REQUIRED: Number of Pages of top-rated movies to fetch and create" );
+        $this->addArgument("startpage", InputArgument::REQUIRED, "REQUIRED: Page from which the utility should start fetching");
+        $this->addArgument("numofpages", InputArgument::REQUIRED,"REQUIRED: Number of Pages of top-rated movies to fetch and create");
         $this->addArgument('movietitle', InputArgument::OPTIONAL, "OPTIONAL: Movie Name to add Movie manually");
 
     }
@@ -59,9 +61,10 @@ class CreateMovieDaosCommand extends Command{
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln("Adding movies now");
-        $numOfPages = $input->getArgument("numofpages");
+        $numOfPages = (int) $input->getArgument("numofpages");
+        $startPage = (int) $input->getArgument("startpage");
         $output->writeln("Number of Pages = $numOfPages");
-        for ($i=1; $i <=$numOfPages; $i++) {
+        for ($i=$startPage; $i <= $startPage+$numOfPages; $i++) {
             $topRatedRes = $this->APIService->getTopRatedMovies($i);
             $topRatedRes = json_decode($topRatedRes);
 

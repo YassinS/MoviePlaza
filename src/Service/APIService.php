@@ -36,6 +36,28 @@ class APIService
     }
     }
 
+    public function getMovieDetailsById($movieId){
+        $client = new Client();
+        $bearerTokenTMDB = $this->bearerTokenTMDB;
+        $promise = $client->requestAsync('GET', "https://api.themoviedb.org/3/movie/$movieId", [
+            'headers' => [
+            'Authorization' => "Bearer $bearerTokenTMDB",
+            'accept' => 'application/json',
+            ],
+        ]);
+       try {
+                $response = $promise->wait();
+                // Here, $response is the actual Response object, not a Promise.
+                // You can now get the data from the response and return it.
+
+                return $response->getBody()->getContents();
+     } catch (RequestException $e) {
+                // Handle the error if the promise is rejected (e.g., network issue, API error).
+                dd($promise);
+    }
+    }
+
+
     public function getTopRatedMovies($page){
         $client = new Client();
         $bearerTokenTMDB = $this->bearerTokenTMDB;

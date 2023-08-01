@@ -11,6 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use \Pimcore\Model\DataObject\Movie;
 
 use App\Form\Type\SearchType;
+use App\Service\APIService;
+use PharIo\Manifest\ApplicationName;
 use Symfony\Component\Form\Form;
 
 class MovieController extends FrontendController
@@ -33,6 +35,17 @@ class MovieController extends FrontendController
         $listingMovies->setLimit(6);
         $logger->info("Rendering movie Detail page");
         return $this->render('movie/view.html.twig',["movies"=>$listingMovies,"formSearch"=>$form]);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @Route("/movie/{movieId}", name="movie_detail", methods={"GET"})
+     */
+    public function detailAction(APIService $APIService, ApplicationLogger $logger, $movieId) : Response {
+        $detailsForMovie = $APIService->getMovieDetailsById($movieId);
+        $detailsForMovie = json_decode($detailsForMovie);
+        return $this->render("movie/detail.html.twig",["details"=>$detailsForMovie,"debug"=> gettype($detailsForMovie) ]);
     }
 
 }
