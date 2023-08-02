@@ -9,6 +9,7 @@
                     <div class="row">
                     {% for movie in movies %}
                         <div class="col">
+                            <a href="/movie/{{movie.id}}">
                             <div class="card m-3" style="width: 18rem;">
                                 <img src="{{movie.backdrop}}" class="card-img-top" alt="{{movie.movieTitle}}">
                                 <div class="card-body">
@@ -17,6 +18,7 @@
                 
                                 </div>
                             </div>
+                            </a>
                         </div>
                     {% endfor %}
                     </div>

@@ -1,3 +1,101 @@
-<pre>
-    {{ dump(details) }}
-</pre>
+{% extends "base.html.twig" %}
+{% block title %}{{movie.title}}{% endblock %}
+{% block body %}
+    <div class="row fade-backdrop">
+            <img src="{{'https://image.tmdb.org/t/p/original/' ~  movie.poster_path }}" class="img-fluid" alt="Movie Poster">
+        </div>
+    <div class="container-fluid">
+        
+        <div class="row">
+                <div class="col-md-8">
+                    <h4 class="mb-3">Overview</h4>
+                    <p>{{ movie.overview }}</p>
+
+                    <h4 class="mb-3">Details</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <strong>Original Language:</strong> {{ movie.original_language }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Popularity:</strong> {{ movie.popularity }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Release Date:</strong> {{ movie.release_date }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Runtime:</strong> {{ movie.runtime }} minutes
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Status:</strong> {{ movie.status }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Tagline:</strong> {{ movie.tagline }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Vote Average:</strong> {{ movie.vote_average }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Vote Count:</strong> {{ movie.vote_count }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        <h4 class="mt-5">Additional Information</h4>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Budget:</strong> {{ movie.budget | number_format(0, ',', '.') }} USD
+                </li>
+                <li class="list-group-item">
+                    <strong>Revenue:</strong> {{ movie.revenue | number_format(0, ',', '.') }} USD
+                </li>
+                <li class="list-group-item">
+                    <strong>Homepage:</strong> <a href="{{ movie.homepage }}">{{ movie.homepage }}</a>
+                </li>
+                <li class="list-group-item">
+                    <strong>Spoken Languages:</strong>
+                    {% for language in movie.spoken_languages %}
+                        {{ language.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </li>
+                <li class="list-group-item">
+                    <strong>Production Countries:</strong>
+                    <div id="filming-locations" class="row  d-flex justify-content-center">
+                        {% for location in movieLocations %}
+                                <div class="js-maps-{{loop.index}}" data-lat={{location.lat}} data-lng={{location.lng}}></div>
+                        {% endfor %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Make sure the container element with ID "filming-locations" exists in your HTML
+        let mapsContainer = document.querySelector('#filming-locations');
+
+        Array.from(mapsContainer.children).forEach((value, i) => {
+            // You can remove the '+1' here to start the ID from 0 if necessary
+            let newDivForMap = document.createElement('div');
+            newDivForMap.style = 'height:500px;width:500px;'
+            newDivForMap.classList.add('m-3');
+            let lat = value.dataset.lat;
+            let lng = value.dataset.lng;
+            let newDivId = 'map-' + i;
+            
+            newDivForMap.id = newDivId;
+            mapsContainer.appendChild(newDivForMap);
+
+            let map = L.map(newDivId).setView([lat, lng], 3); // You can adjust the zoom level here
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            let marker = L.marker([lat, lng]).addTo(map);
+        });
+    });
+    </script>
+{% endblock %}

@@ -9,6 +9,7 @@
  * - description [textarea]
  * - backdrop [externalImage]
  * - popularity [numeric]
+ * - movieLocation [fieldcollections]
  */
 
 return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
@@ -18,7 +19,7 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'title' => '',
    'description' => '',
    'creationDate' => NULL,
-   'modificationDate' => 1690794011,
+   'modificationDate' => 1690979975,
    'userOwner' => 2,
    'userModification' => 2,
    'parentClass' => '',
@@ -169,6 +170,37 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
              'width' => '',
              'defaultValueGenerator' => '',
           )),
+          4 => 
+          \Pimcore\Model\DataObject\ClassDefinition\Data\Fieldcollections::__set_state(array(
+             'name' => 'movieLocation',
+             'title' => 'movieLocation',
+             'tooltip' => '',
+             'mandatory' => false,
+             'noteditable' => false,
+             'index' => 0,
+             'locked' => false,
+             'style' => '',
+             'permissions' => NULL,
+             'fieldtype' => '',
+             'relationType' => false,
+             'invisible' => false,
+             'visibleGridView' => false,
+             'visibleSearch' => false,
+             'blockedVarsForExport' => 
+            array (
+            ),
+             'allowedTypes' => 
+            array (
+              0 => 'movieLocation',
+            ),
+             'lazyLoading' => true,
+             'maxItems' => NULL,
+             'disallowAddRemove' => false,
+             'disallowReorder' => false,
+             'collapsed' => false,
+             'collapsible' => false,
+             'border' => false,
+          )),
         ),
          'locked' => false,
          'blockedVarsForExport' => 
@@ -226,36 +258,6 @@ return \Pimcore\Model\DataObject\ClassDefinition::__set_state(array(
    'enableGridLocking' => false,
    'deletedDataComponents' => 
   array (
-    0 => 
-    \Pimcore\Model\DataObject\ClassDefinition\Data\Numeric::__set_state(array(
-       'name' => 'budget',
-       'title' => 'Budget',
-       'tooltip' => '',
-       'mandatory' => false,
-       'noteditable' => false,
-       'index' => 0,
-       'locked' => false,
-       'style' => '',
-       'permissions' => NULL,
-       'fieldtype' => '',
-       'relationType' => false,
-       'invisible' => false,
-       'visibleGridView' => false,
-       'visibleSearch' => false,
-       'blockedVarsForExport' => 
-      array (
-      ),
-       'defaultValue' => NULL,
-       'integer' => false,
-       'unsigned' => false,
-       'minValue' => NULL,
-       'maxValue' => NULL,
-       'unique' => false,
-       'decimalSize' => NULL,
-       'decimalPrecision' => NULL,
-       'width' => '',
-       'defaultValueGenerator' => '',
-    )),
   ),
    'blockedVarsForExport' => 
   array (

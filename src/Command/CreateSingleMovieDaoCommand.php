@@ -18,11 +18,11 @@ use PHPUnit\Util\Json;
 use Pimcore\Model\DataObject\Data\BlockElement;
 
 #[AsCommand(
-    name: 'movies:create:many',
-    description:'automatically fetches movies and creates new DAOs',
+    name: 'movies:create:one',
+    description:'automatically fetches single movie by ID and creates a new DAO',
     hidden: false
 )]
-class CreateMovieDaosCommand extends Command{
+class CreateSingleMovieDaoCommand extends Command{
 
     private $publicDir;
 
@@ -95,24 +95,18 @@ class CreateMovieDaosCommand extends Command{
     }
 
     protected function configure(): void{
-        $this->addArgument("startpage", InputArgument::REQUIRED, "REQUIRED: Page from which the utility should start fetching");
-        $this->addArgument("numofpages", InputArgument::REQUIRED,"REQUIRED: Number of Pages of top-rated movies to fetch and create");
-        $this->addArgument('movieID', InputArgument::OPTIONAL, "OPTIONAL: Movie ID to add Movie manually");
+        $this->addArgument('movieID', InputArgument::REQUIRED, "OPTIONAL: Movie ID to add Movie manually");
 
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->hasArgument("movieID")) {
             $movieID = $input->getArgument("movieID");
             $output->writeln("Adding movie with ID $movieID");
             $movieJson = $this->APIService->getMovieDetailsById($movieID);
             $movieJson = json_decode($movieJson);
             $productionCountriesFromApi = $movieJson->production_countries;
             $this->getGeolocation($productionCountriesFromApi);
-
-
-
             $productionCountryLatLong = array();
             foreach ($productionCountriesFromApi as $countryCode) {
                         $movieLocation = $this->getGeolocation($countryCode->iso_3166_1);
@@ -120,34 +114,7 @@ class CreateMovieDaosCommand extends Command{
                     }
             $resArray = ["id"=>$movieJson->id,"title"=>$movieJson->original_title,"backdrop"=>$movieJson->poster_path,"overview"=>$movieJson->overview, "popularity"=>$movieJson->popularity,"countries"=>$productionCountryLatLong];
             $this->createMovieAction($resArray);
-            return Command::SUCCESS;
 
-        }
-        $output->writeln("Adding movies now");
-        $numOfPages = (int) $input->getArgument("numofpages");
-        $startPage = (int) $input->getArgument("startpage");
-        $output->writeln("Number of Pages = $numOfPages");
-        for ($i=$startPage; $i <= $startPage+$numOfPages; $i++) {
-            $topRatedRes = $this->APIService->getTopRatedMovies($i);
-            $topRatedRes = json_decode($topRatedRes);
-
-            foreach ($topRatedRes->results as $movie) {
-                if ($movie->original_language == "en" && !($movie->adult)) {
-                    $output->writeln($movie->original_title);
-                    $output->writeln($i);
-                    $productionCountriesFromApi = json_decode($this->APIService->getMovieDetailsById($movie->id))->production_countries;
-                    $productionCountryLatLong = array();
-                    foreach ($productionCountriesFromApi as $countryCode) {
-                        $movieLocation = $this->getGeolocation($countryCode->iso_3166_1);
-                        $productionCountryLatLong[] = $movieLocation;
-                    }
-                    $resArray = ["id"=>$movie->id,"title"=>$movie->original_title,"backdrop"=>$movie->poster_path,"overview"=>$movie->overview, "popularity"=>$movie->popularity,"countries"=>$productionCountryLatLong];
-                    $this->createMovieAction($resArray);
-
-                }
-
-            }
-    }
 
         return Command::SUCCESS;
 

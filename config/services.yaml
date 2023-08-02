@@ -43,9 +43,9 @@ services:
 
     # auto-register all controllers as services
     App\Controller\:
-        resource: '../src/Controller'
+        resource: "../src/Controller"
         public: true
-        tags: ['controller.service_arguments']
+        tags: ["controller.service_arguments"]
 
     #
     # COMMANDS
@@ -53,11 +53,17 @@ services:
 
     # auto-register all commands as services
     App\Command\:
-        resource: '../src/Command/*'
-        tags: ['console.command']
+        resource: "../src/Command/*"
+        tags: ["console.command"]
+    App\Command\CreateMovieDaosCommand:
+        arguments:
+            $publicDir: "%kernel.project_dir%/public"
+    App\Command\CreateSingleMovieDaoCommand:
+        arguments:
+            $publicDir: "%kernel.project_dir%/public"
     App\Service\:
-        resource: '../src/Service/*'
-        tags: ['service']
+        resource: "../src/Service/*"
+        tags: ["service"]
     # Example custom templating helper
     # App\Templating\Helper\Example:
     #     # templating helpers need to be public as they

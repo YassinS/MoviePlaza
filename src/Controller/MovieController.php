@@ -43,9 +43,15 @@ class MovieController extends FrontendController
      * @Route("/movie/{movieId}", name="movie_detail", methods={"GET"})
      */
     public function detailAction(APIService $APIService, ApplicationLogger $logger, $movieId) : Response {
+        $movieObject = Movie::getById($movieId);
+        if (!($movieObject)) {
+            throw $this->createNotFoundException("Movie doesn't live on our servers yet :(");
+        }
+
         $detailsForMovie = $APIService->getMovieDetailsById($movieId);
         $detailsForMovie = json_decode($detailsForMovie);
-        return $this->render("movie/detail.html.twig",["details"=>$detailsForMovie,"debug"=> gettype($detailsForMovie) ]);
+        return $this->render("movie/detail.html.twig",["movie"=>$detailsForMovie,"movieLocations"=>$movieObject->getMovieLocation() ]);
+
     }
 
 }

@@ -26,12 +26,9 @@ class APIService
         ]);
        try {
                 $response = $promise->wait();
-                // Here, $response is the actual Response object, not a Promise.
-                // You can now get the data from the response and return it.
 
                 return $response->getBody()->getContents();
      } catch (RequestException $e) {
-                // Handle the error if the promise is rejected (e.g., network issue, API error).
                 dd($promise);
     }
     }
