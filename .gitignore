@@ -51,6 +51,6 @@ nbproject
 node_modules
 .yarn
 data
-
+supervisord.pid
 #envs
 .env

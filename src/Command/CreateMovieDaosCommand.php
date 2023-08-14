@@ -7,15 +7,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 use Pimcore\Bundle\ApplicationLoggerBundle\ApplicationLogger;
 use Pimcore\Model\DataObject\Movie;
 use Pimcore\Model\DataObject\Data\ExternalImage;
 
 use App\Service\APIService;
-use PHPUnit\Util\Json;
-use Pimcore\Model\DataObject\Data\BlockElement;
 
 #[AsCommand(
     name: 'movies:create:many',
@@ -103,26 +100,6 @@ class CreateMovieDaosCommand extends Command{
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->hasArgument("movieID")) {
-            $movieID = $input->getArgument("movieID");
-            $output->writeln("Adding movie with ID $movieID");
-            $movieJson = $this->APIService->getMovieDetailsById($movieID);
-            $movieJson = json_decode($movieJson);
-            $productionCountriesFromApi = $movieJson->production_countries;
-            $this->getGeolocation($productionCountriesFromApi);
-
-
-
-            $productionCountryLatLong = array();
-            foreach ($productionCountriesFromApi as $countryCode) {
-                        $movieLocation = $this->getGeolocation($countryCode->iso_3166_1);
-                        $productionCountryLatLong[] = $movieLocation;
-                    }
-            $resArray = ["id"=>$movieJson->id,"title"=>$movieJson->original_title,"backdrop"=>$movieJson->poster_path,"overview"=>$movieJson->overview, "popularity"=>$movieJson->popularity,"countries"=>$productionCountryLatLong];
-            $this->createMovieAction($resArray);
-            return Command::SUCCESS;
-
-        }
         $output->writeln("Adding movies now");
         $numOfPages = (int) $input->getArgument("numofpages");
         $startPage = (int) $input->getArgument("startpage");
@@ -130,7 +107,6 @@ class CreateMovieDaosCommand extends Command{
         for ($i=$startPage; $i <= $startPage+$numOfPages; $i++) {
             $topRatedRes = $this->APIService->getTopRatedMovies($i);
             $topRatedRes = json_decode($topRatedRes);
-
             foreach ($topRatedRes->results as $movie) {
                 if ($movie->original_language == "en" && !($movie->adult)) {
                     $output->writeln($movie->original_title);

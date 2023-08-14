@@ -1,11 +1,11 @@
 {% extends "base.html.twig" %}
 {% block title %}{{movie.title}}{% endblock %}
 {% block body %}
-    <div class="row fade-backdrop">
-            <img src="{{'https://image.tmdb.org/t/p/original/' ~  movie.poster_path }}" class="img-fluid" alt="Movie Poster">
-        </div>
+    
     <div class="container-fluid">
-        
+        <div>
+            <img class="h-50 d-inline-block rounded " src="{{'https://image.tmdb.org/t/p/original/' ~  movie.poster_path }}"  style="max-width:500px;max-height:500px;" alt="Movie Poster">
+        </div>
         <div class="row">
                 <div class="col-md-8">
                     <h4 class="mb-3">Overview</h4>
@@ -60,11 +60,13 @@
                 </li>
                 <li class="list-group-item">
                     <strong>Production Countries:</strong>
-                    <div id="filming-locations" class="row  d-flex justify-content-center">
+                    <div id="production-countries" class="row">
                         {% for location in movieLocations %}
                                 <div class="js-maps-{{loop.index}}" data-lat={{location.lat}} data-lng={{location.lng}}></div>
                         {% endfor %}
+                        
                     </div>
+                    <div id="map" class="d-flex justify-content-center" style="width:500px;height:500px;"></div>
                 </li>
             </ul>
         </div>
@@ -73,28 +75,17 @@
 {% block scripts %}
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Make sure the container element with ID "filming-locations" exists in your HTML
-        let mapsContainer = document.querySelector('#filming-locations');
-
+        const mapsContainer = document.querySelector('#production-countries');
+        const map = L.map("map").setView([0, 0], 1);
         Array.from(mapsContainer.children).forEach((value, i) => {
-            // You can remove the '+1' here to start the ID from 0 if necessary
-            let newDivForMap = document.createElement('div');
-            newDivForMap.style = 'height:500px;width:500px;'
-            newDivForMap.classList.add('m-3');
             let lat = value.dataset.lat;
             let lng = value.dataset.lng;
-            let newDivId = 'map-' + i;
-            
-            newDivForMap.id = newDivId;
-            mapsContainer.appendChild(newDivForMap);
-
-            let map = L.map(newDivId).setView([lat, lng], 3); // You can adjust the zoom level here
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap'
             }).addTo(map);
-            let marker = L.marker([lat, lng]).addTo(map);
+            const marker = L.marker([lat, lng]).addTo(map);
         });
     });
     </script>
